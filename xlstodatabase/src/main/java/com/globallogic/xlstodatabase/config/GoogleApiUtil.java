@@ -30,17 +30,9 @@ import com.google.api.services.sheets.v4.model.ValueRange;
 
 @Service
 public class GoogleApiUtil {
-	
-	
-	@Autowired
-	ParticipantsOfMeetingService participantsOfMeetingService;
-
-	
-
 	private static final String APPLICATION_NAME = "Google Sheets API Java Quickstart";
 	private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
 	private static final String TOKENS_DIRECTORY_PATH = "tokens";
-
 	/**
 	 * Global instance of the scopes required by this quickstart. If modifying these
 	 * scopes, delete your previously saved tokens/ folder.
@@ -72,28 +64,6 @@ public class GoogleApiUtil {
 		return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
 	}
 
-	/**
-	 * Prints the names and majors of students in a sample spreadsheet:
-	 * https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
-	 */
-
-	/*
-	 * public static void main(String... args) throws IOException,
-	 * GeneralSecurityException { final NetHttpTransport HTTP_TRANSPORT =
-	 * GoogleNetHttpTransport.newTrustedTransport(); final String spreadsheetId =
-	 * "1QNAE6eympfNkC4KsQ7oU68Dya5fqpQnS5RUuPafePAg"; final String range =
-	 * "A1:F93"; Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY,
-	 * getCredentials(HTTP_TRANSPORT))
-	 * .setApplicationName(APPLICATION_NAME).build(); ValueRange response =
-	 * service.spreadsheets().values().get(spreadsheetId, range).execute();
-	 * List<List<Object>> values = response.getValues(); if (values == null ||
-	 * values.isEmpty()) { System.out.println("No data found."); } else {
-	 * System.out.println("Name, Major"); for (List row : values) { // Print columns
-	 * A and E, which correspond to indices 0 and 4. System.out.println(row.get(0)
-	 * +"  "+row.get(1) + "  " + row.get(2) + " " + row.get(3) + " " + row.get(4));
-	 * } } }
-	 */
-
 	public List<List<MeetingDto>> getSpreadSheetData(List<String> idsList, List<String> spreedSheetName)
 			throws IOException, GeneralSecurityException {
 		int count = 0;
@@ -119,7 +89,6 @@ public class GoogleApiUtil {
 					meeting.setFirstName(String.valueOf(row.get(0)));
 					meeting.setLastName(String.valueOf(row.get(1)));
 					meeting.setMeetingId((spreedSheetName.get(count)).substring(16,28).trim());
-					//meeting.setMeetingId((spreedSheetName.get(count)));
 					meeting.setTimeExited(String.valueOf(row.get(5)));
 					meeting.setTimeJoined(String.valueOf(row.get(4)));
 					meeting.setMeetingDate((spreedSheetName.get(count)).substring(0,10).trim());

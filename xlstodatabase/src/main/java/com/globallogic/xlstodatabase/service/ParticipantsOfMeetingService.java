@@ -5,9 +5,10 @@ import java.security.GeneralSecurityException;
 
 public interface ParticipantsOfMeetingService {
 
-	public Object saveExcel() throws GeneralSecurityException, IOException;
+	Object saveExcel() throws GeneralSecurityException, IOException;
 	Object getAllMeetingsParticipantsList();
 	Object getParticipantsByMeetingId(String meetingId);
+	Object getParticipantsAssesmentScoreByMeetingId(String meetingId);
 
 
 }

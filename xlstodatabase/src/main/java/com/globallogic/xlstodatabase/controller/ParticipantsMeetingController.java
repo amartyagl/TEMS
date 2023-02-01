@@ -36,11 +36,18 @@ public class ParticipantsMeetingController {
                 new ResponseEntity<Object>(participantsOfMeetingService.getAllMeetingsParticipantsList(), HttpStatus.OK);
     }
 
-    @GetMapping("/getPartiCipantsByMeetingId")
+    @GetMapping("/getParticipantsByMeetingId")
     public ResponseEntity<Object> getByMeetingId(@RequestParam String meetingId) {
         logger.info("Request for getAllParticipants of MeetingController :{}",
                 meetingId);
         return new ResponseEntity<Object>(participantsOfMeetingService.getParticipantsByMeetingId(meetingId), HttpStatus.OK);
+    }
+
+    @GetMapping("/getParticipantsScoreByMeetingId")
+    public ResponseEntity<Object> getScoreByMeetingId(@RequestParam String meetingId) {
+        logger.info("Request for getAllParticipants of MeetingController :{}",
+                meetingId);
+        return new ResponseEntity<Object>(participantsOfMeetingService.getParticipantsAssesmentScoreByMeetingId(meetingId), HttpStatus.OK);
     }
     
     

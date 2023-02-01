@@ -1,16 +1,14 @@
 package com.globallogic.xlstodatabase.modal;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -20,19 +18,16 @@ import jakarta.persistence.Table;
 @IdClass(ParticipantOfmeetingsId.class)
 public class ParticipantOfMeeting implements Serializable {
 
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	@Id
-
 	@ManyToOne
-
 	@JoinColumn(name = "eid")
 	private Employee eid;
 
 	@Id
-
 	@ManyToOne
-
 	@JoinColumn(name = "mid")
 	private MeetingDetails mid;
 
@@ -88,8 +83,6 @@ public class ParticipantOfMeeting implements Serializable {
 	public int hashCode() {
 		return Objects.hash(assesmentScore, duration, eid, mid, timeExisted, timeJoined);
 	}
-	
-	
 
 	public String getTimeJoined() {
 		return timeJoined;

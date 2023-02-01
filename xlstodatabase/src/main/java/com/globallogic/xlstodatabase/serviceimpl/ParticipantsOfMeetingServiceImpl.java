@@ -3,6 +3,7 @@ package com.globallogic.xlstodatabase.serviceimpl;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -77,8 +78,9 @@ public class ParticipantsOfMeetingServiceImpl implements ParticipantsOfMeetingSe
 				participantOfMeeting.setAssesmentScore(null);
 				participantOfMeeting.setEid(employeeExist);
 				participantOfMeeting.setMid(savedMeetingDetails);
-				participantOfMeeting.setTimeExisted(null);
-				participantOfMeeting.setDuration(null);
+				participantOfMeeting.setTimeExisted(meetingDto.getTimeExited());
+				participantOfMeeting.setTimeJoined(meetingDto.getTimeJoined());
+				participantOfMeeting.setDuration(meetingDto.getDuration());
 				participantsofMeetingRepository.save(participantOfMeeting);
 
 			}
@@ -95,7 +97,26 @@ public class ParticipantsOfMeetingServiceImpl implements ParticipantsOfMeetingSe
 	public Object getAllMeetingsParticipantsList() {
 		try {
 			logger.info("Inside getMeetingList of MeetingService");
-			return new Response<>(participantsofMeetingRepository.findAll(), "1", "Data fetched successfully");
+			List<ParticipantOfMeeting> dataFromRepo = participantsofMeetingRepository.findAll();
+			List<MeetingDto> responseList = new ArrayList<>();
+			if (dataFromRepo != null && dataFromRepo.size() != 0) {
+				for (ParticipantOfMeeting particpant : dataFromRepo) {
+					Employee employeeData = particpant.getEid();
+					MeetingDto meetingDto = new MeetingDto();
+					meetingDto.setFirstName(employeeData.getFirstName());
+					meetingDto.setLastName(employeeData.getLastName());
+					meetingDto.setId(employeeData.getEid());
+					meetingDto.setEmail(employeeData.getEmail());
+					MeetingDetails meetingDetails = particpant.getMid();
+					meetingDto.setMeetingId(meetingDetails.getMeetingId());
+					meetingDto.setTimeExited(particpant.getTimeExisted());
+					meetingDto.setMeetingDate(meetingDetails.getMeetingDate());
+					meetingDto.setDuration(particpant.getDuration());
+					meetingDto.setTimeJoined(particpant.getTimeJoined());
+					responseList.add(meetingDto);
+				}
+			}
+			return new Response<>(responseList, "1", "Data fetched successfully");
 		} catch (Exception e) {
 			String errorMsg = MessageFormat.format("Exception caught in getMeetingList of MeetingService :{0}", e);
 			logger.error(errorMsg);
@@ -103,10 +124,31 @@ public class ParticipantsOfMeetingServiceImpl implements ParticipantsOfMeetingSe
 		}
 
 	}
+
 	public Object getParticipantsByMeetingId(String meetingId) {
 		try {
 			logger.info("Inside getByMeetingId of MeetingService");
-			return participantsofMeetingRepository.findByMid(meetingId);
+			List<ParticipantOfMeeting> dataFromRepo = participantsofMeetingRepository.findByMid(meetingId);
+			;
+			List<MeetingDto> responseList = new ArrayList<>();
+			if (dataFromRepo != null && dataFromRepo.size() != 0) {
+				for (ParticipantOfMeeting particpant : dataFromRepo) {
+					Employee employeeData = particpant.getEid();
+					MeetingDto meetingDto = new MeetingDto();
+					meetingDto.setFirstName(employeeData.getFirstName());
+					meetingDto.setLastName(employeeData.getLastName());
+					meetingDto.setId(employeeData.getEid());
+					meetingDto.setEmail(employeeData.getEmail());
+					MeetingDetails meetingDetails = particpant.getMid();
+					meetingDto.setMeetingId(meetingDetails.getMeetingId());
+					meetingDto.setTimeExited(particpant.getTimeExisted());
+					meetingDto.setMeetingDate(meetingDetails.getMeetingDate());
+					meetingDto.setDuration(particpant.getDuration());
+					meetingDto.setTimeJoined(particpant.getTimeJoined());					
+					responseList.add(meetingDto);
+				}
+			}
+			return new Response<>(responseList, "1", "Data fetched successfully");
 		} catch (Exception e) {
 			String errorMsg = MessageFormat.format("Exception caught in getByMeetingId of MeetingService :{0}", e);
 			logger.error(errorMsg);

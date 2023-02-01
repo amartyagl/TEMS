@@ -41,6 +41,8 @@ public class ParticipantOfMeeting implements Serializable {
 	private String duration;
 
 	private String assesmentScore;
+	
+	private String timeJoined;
 
 	public Employee getEid() {
 		return eid;
@@ -84,7 +86,17 @@ public class ParticipantOfMeeting implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(assesmentScore, duration, eid, mid, timeExisted);
+		return Objects.hash(assesmentScore, duration, eid, mid, timeExisted, timeJoined);
+	}
+	
+	
+
+	public String getTimeJoined() {
+		return timeJoined;
+	}
+
+	public void setTimeJoined(String timeJoined) {
+		this.timeJoined = timeJoined;
 	}
 
 	@Override
@@ -98,14 +110,15 @@ public class ParticipantOfMeeting implements Serializable {
 		ParticipantOfMeeting other = (ParticipantOfMeeting) obj;
 		return Objects.equals(assesmentScore, other.assesmentScore) && Objects.equals(duration, other.duration)
 				&& Objects.equals(eid, other.eid) && Objects.equals(mid, other.mid)
-				&& Objects.equals(timeExisted, other.timeExisted);
+				&& Objects.equals(timeExisted, other.timeExisted) && Objects.equals(timeJoined, other.timeJoined);
 	}
 
 	@Override
 	public String toString() {
 		return "ParticipantOfMeeting [eid=" + eid + ", mid=" + mid + ", timeExisted=" + timeExisted + ", duration="
-				+ duration + ", assesmentScore=" + assesmentScore + "]";
+				+ duration + ", assesmentScore=" + assesmentScore + ", timeJoined=" + timeJoined + "]";
 	}
 
+	
 }
 

@@ -11,14 +11,14 @@ import java.util.List;
 @Repository
 public interface MeetingDetailsRepository extends JpaRepository<MeetingDetails, String> {
 
-    @Query(value="UPDATE meetingdetails set meetingAnchor=?1 where meetingId=?2",nativeQuery=true)
-    MeetingDetails updateSME(String meetingAnchor, String meetingId);
+	@Query(value = "UPDATE meetingdetails set meetingAnchor=?1 and topic=?2 where meetingId=?3", nativeQuery = true)
+	MeetingDetails updateSME(Long meetingAnchor, String topic, String meetingId);
 
-    @Query(value="select * meetingdetails where meetingAnchor=?1",nativeQuery=true)
-    List<MeetingDetails> getBySME(String meetingAnchor);
+	@Query(value = "select * from meetingdetails where meeting_anchor=?1", nativeQuery = true)
+	List<MeetingDetails> getBySME(Long smeId);
 
-    
-
-
+	
+	@Query(value="select * from meetingdetails where meeting_id=?1", nativeQuery = true)
+	MeetingDetails findByMeetingId(String meetingId);
 
 }

@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.globallogic.xlstodatabase.service.ParticipantsOfMeetingService;
 
 @RestController
-public class MeetingController {
+public class ParticipantsMeetingController {
 
-    Logger logger = LoggerFactory.getLogger(MeetingController.class);
+    Logger logger = LoggerFactory.getLogger(ParticipantsMeetingController.class);
 
     @Autowired
     ParticipantsOfMeetingService participantsOfMeetingService;
@@ -42,4 +42,8 @@ public class MeetingController {
                 meetingId);
         return new ResponseEntity<Object>(participantsOfMeetingService.getParticipantsByMeetingId(meetingId), HttpStatus.OK);
     }
+    
+    
+    
+    
 }

@@ -10,4 +10,6 @@ public interface EmployeeService {
 
 	public Object addEmployee(EmployeeDto employeeDto);
 
+	public Object getSmeDetails(String getSmeByMeetingId);
+
 }

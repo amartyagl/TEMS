@@ -22,6 +22,7 @@ import com.globallogic.xlstodatabase.repository.EmployeeRepository;
 import com.globallogic.xlstodatabase.repository.MeetingDetailsRepository;
 import com.globallogic.xlstodatabase.repository.ParticipantsofMeetingRepository;
 import com.globallogic.xlstodatabase.service.ParticipantsOfMeetingService;
+import com.globallogic.xlstodatabase.utility.Utility;
 
 import jakarta.transaction.Transactional;
 
@@ -63,7 +64,7 @@ public class ParticipantsOfMeetingServiceImpl implements ParticipantsOfMeetingSe
 	public Object storeInDatabase(List<MeetingDto> listData) {
 		try {
 			MeetingDetails meetingDetails = new MeetingDetails();
-			meetingDetails.setMeetingDate(listData.get(0).getMeetingDate());
+			meetingDetails.setMeetingDate(Utility.stringToDate(listData.get(0).getMeetingDate()));
 			meetingDetails.setMeetingId(listData.get(0).getMeetingId());
 			meetingDetails.setTopic(null);
 			meetingDetails.setTotalHours(null);
@@ -110,7 +111,7 @@ public class ParticipantsOfMeetingServiceImpl implements ParticipantsOfMeetingSe
 					MeetingDetails meetingDetails = particpant.getMid();
 					meetingDto.setMeetingId(meetingDetails.getMeetingId());
 					meetingDto.setTimeExited(particpant.getTimeExisted());
-					meetingDto.setMeetingDate(meetingDetails.getMeetingDate());
+					meetingDto.setMeetingDate(String.valueOf( meetingDetails.getMeetingDate()));
 					meetingDto.setDuration(particpant.getDuration());
 					meetingDto.setTimeJoined(particpant.getTimeJoined());
 					responseList.add(meetingDto);
@@ -142,7 +143,7 @@ public class ParticipantsOfMeetingServiceImpl implements ParticipantsOfMeetingSe
 					MeetingDetails meetingDetails = particpant.getMid();
 					meetingDto.setMeetingId(meetingDetails.getMeetingId());
 					meetingDto.setTimeExited(particpant.getTimeExisted());
-					meetingDto.setMeetingDate(meetingDetails.getMeetingDate());
+					meetingDto.setMeetingDate(String.valueOf(meetingDetails.getMeetingDate()));
 					meetingDto.setDuration(particpant.getDuration());
 					meetingDto.setTimeJoined(particpant.getTimeJoined());					
 					responseList.add(meetingDto);

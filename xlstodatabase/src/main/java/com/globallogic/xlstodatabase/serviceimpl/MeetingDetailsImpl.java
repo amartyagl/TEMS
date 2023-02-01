@@ -61,7 +61,7 @@ public class MeetingDetailsImpl implements MeetingDetailsService {
 			List<MeetingDetails> meetingDetails = meetingDetailsRepository.getBySME(smeId);
 			for (MeetingDetails meetingDetails2 : meetingDetails) {
 				MeetingDetailsDto meetingDetailsDto = new MeetingDetailsDto();
-				meetingDetailsDto.setMeetingDate(meetingDetails2.getMeetingDate());
+				meetingDetailsDto.setMeetingDate(String.valueOf(meetingDetails2.getMeetingDate()));
 				meetingDetailsDto.setMeetingId(meetingDetails2.getMeetingId());
 				meetingDetailsDto.setTopic(meetingDetails2.getTopic());
 				reponseList.add(meetingDetailsDto);

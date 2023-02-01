@@ -1,6 +1,7 @@
 package com.globallogic.xlstodatabase.modal;
 
 import java.io.Serializable;
+import java.sql.Date;
 import java.util.List;
 
 import jakarta.persistence.Entity;
@@ -21,7 +22,7 @@ public class MeetingDetails implements Serializable {
 
 	@Id
 	private String meetingId;
-	private String meetingDate;
+	private Date meetingDate;
 	private String topic;
 	@ManyToOne
 	@JoinColumn(name = "meetingAnchor")
@@ -29,30 +30,39 @@ public class MeetingDetails implements Serializable {
 	private String totalHours;
 	@OneToMany(mappedBy = "mid")
 	private List<ParticipantOfMeeting> participantOfMeetings;
+
 	public String getMeetingId() {
 		return meetingId;
 	}
+
 	public void setMeetingId(String meetingId) {
 		this.meetingId = meetingId;
 	}
-	public String getMeetingDate() {
+
+	public Date getMeetingDate() {
 		return meetingDate;
 	}
-	public void setMeetingDate(String meetingDate) {
+
+	public void setMeetingDate(Date meetingDate) {
 		this.meetingDate = meetingDate;
 	}
+
 	public String getTopic() {
 		return topic;
 	}
+
 	public void setTopic(String topic) {
 		this.topic = topic;
 	}
+
 	public Employee getMeetingAnchor() {
 		return meetingAnchor;
 	}
+
 	public void setMeetingAnchor(Employee meetingAnchor) {
 		this.meetingAnchor = meetingAnchor;
 	}
+
 	public String getTotalHours() {
 		return totalHours;
 	}

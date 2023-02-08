@@ -68,12 +68,16 @@ public class ParticipantsOfMeetingServiceImpl implements ParticipantsOfMeetingSe
 	public Object storeInDatabase(List<MeetingDto> listData) {
 		try {
 			MeetingDetails meetingDetails = new MeetingDetails();
-			meetingDetails.setMeetingDate(Utility.stringToDate(listData.get(0).getMeetingDate()));
-			meetingDetails.setMeetingId(listData.get(0).getMeetingId());
-			meetingDetails.setTopic(null);
-			meetingDetails.setTotalHours(0);
-			meetingDetails.setMeetingAnchor(null);
-			MeetingDetails savedMeetingDetails = meetingDetailsRepository.save(meetingDetails);
+			meetingDetails=meetingDetailsRepository.findByMeetingId(listData.get(0).getMeetingId());
+			MeetingDetails savedMeetingDetails=null;
+			if(meetingDetails==null) {
+				meetingDetails.setMeetingDate(Utility.stringToDate(listData.get(0).getMeetingDate()));
+				meetingDetails.setMeetingId(listData.get(0).getMeetingId());
+				meetingDetails.setTopic(null);
+				meetingDetails.setTotalHours(0.0);
+				meetingDetails.setMeetingAnchor(null);
+				savedMeetingDetails = meetingDetailsRepository.save(meetingDetails);
+			}
 			for (MeetingDto meetingDto : listData) {
 				Employee employeeExist = employeeRepository.findByEmail(meetingDto.getEmail());
 				if (employeeExist == null) {

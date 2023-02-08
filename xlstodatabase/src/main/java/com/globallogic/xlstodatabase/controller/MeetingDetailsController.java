@@ -1,5 +1,8 @@
 package com.globallogic.xlstodatabase.controller;
 
+import com.globallogic.xlstodatabase.dto.MeetingDetailsDto;
+import com.globallogic.xlstodatabase.exception.EmployeeNotFound;
+import com.globallogic.xlstodatabase.exception.SMESubjectAvailiability;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +26,15 @@ public class MeetingDetailsController {
 	@Autowired
 	MeetingDetailsService meetingDetailsService;
 
+	@PostMapping(value = "/v1/addFutureMeeting")
+	public ResponseEntity<String> addMeeting(@RequestBody MeetingDetailsDto meetingDetailsDto) throws Exception {
+		logger.info("in meetingDetails controller Request for addMeeting ");
+		meetingDetailsService.createMeeting(meetingDetailsDto);
+		return new ResponseEntity<String>("Meeting created successfully", HttpStatus.OK);
+	}
+
 	@PostMapping(value = "/v1/updateSmeAndTopic")
-	public ResponseEntity<Object> updateSmeAnsdTopic(@RequestBody SmeTopicDto smeTopicDto) {
+	public ResponseEntity<Object> updateSmeAnsdTopic(@RequestBody SmeTopicDto smeTopicDto) throws SMESubjectAvailiability, EmployeeNotFound {
 		logger.info("Request for updateSmeAnsdTopic {}", smeTopicDto);
 		return new ResponseEntity<Object>(meetingDetailsService.updateSMEAndTopic(smeTopicDto), HttpStatus.OK);
 

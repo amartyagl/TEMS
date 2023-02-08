@@ -1,7 +1,7 @@
 package com.globallogic.xlstodatabase.controller;
 
 import com.globallogic.xlstodatabase.dto.EmployeeHoursDto;
-import com.globallogic.xlstodatabase.modal.Employee;
+import com.globallogic.xlstodatabase.exception.MeetingNotExist;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ public class EmployeeController {
 	}
 	
 	@GetMapping(value="/v1/getSmeByMeetingId")
-	public ResponseEntity<Object> getSmeByMeetingId(@RequestParam String meetingId){
+	public ResponseEntity<Object> getSmeByMeetingId(@RequestParam String meetingId) throws MeetingNotExist {
 		logger.info("Request for getSmeByMeetingId {}", meetingId);
 		return new ResponseEntity<Object>(employeeService.getSmeDetails(meetingId),HttpStatus.OK);
 		

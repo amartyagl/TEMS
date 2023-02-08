@@ -1,6 +1,5 @@
 package com.globallogic.xlstodatabase.serviceimpl;
 
-import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import com.globallogic.xlstodatabase.dto.MeetingDetailsDto;
 import com.globallogic.xlstodatabase.dto.SmeTopicDto;
-import com.globallogic.xlstodatabase.exception.ExcelReadingException;
 import com.globallogic.xlstodatabase.exception.Response;
 import com.globallogic.xlstodatabase.modal.Employee;
 import com.globallogic.xlstodatabase.modal.MeetingDetails;
@@ -60,7 +58,7 @@ public class MeetingDetailsImpl implements MeetingDetailsService {
 			meetingDetailsRepository.save(meetingDetails);
 		}
 		else {
-			throw new EmployeeNotFound("Employe not found with given id");
+			throw new EmployeeNotFound("Employee not found with given id");
 		}
 		return meetingDetailsDto;
 	}
@@ -69,7 +67,7 @@ public class MeetingDetailsImpl implements MeetingDetailsService {
 	public Object updateSMEAndTopic(SmeTopicDto smeTopicDto) throws EmployeeNotFound, SMESubjectAvailiability {
 			logger.info("Inside updateSMEAndTopic of MeetingDetailsImpl");
 			Optional<Employee> employee = employeeRepository.findById(smeTopicDto.getSmeId());
-			if (!employee.isPresent()) {
+			if (employee.isEmpty()) {
 				throw new EmployeeNotFound("employee does not exist");
 			}
 			if(smeDetailsRepository.findyByEidAndTopic(smeTopicDto.getSmeId(),smeTopicDto.getTopic().toLowerCase())!=null) {

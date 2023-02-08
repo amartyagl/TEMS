@@ -12,33 +12,23 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-
 @Table(name = "participantsofmeeting")
-
 @IdClass(ParticipantOfmeetingsId.class)
 public class ParticipantOfMeeting implements Serializable {
-
 	@Serial
 	private static final long serialVersionUID = 1L;
-
 	@Id
 	@ManyToOne
 	@JoinColumn(name = "eid")
 	private Employee eid;
-
 	@Id
 	@ManyToOne
 	@JoinColumn(name = "mid")
 	private MeetingDetails mid;
-
 	private String timeExisted;
-
 	private String duration;
-
 	private String assesmentScore;
-	
 	private String timeJoined;
-
 	public Employee getEid() {
 		return eid;
 	}

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import com.globallogic.xlstodatabase.modal.MeetingDetails;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -20,5 +21,17 @@ public interface MeetingDetailsRepository extends JpaRepository<MeetingDetails, 
 	
 	@Query(value="select * from meetingdetails where meeting_id=?1", nativeQuery = true)
 	MeetingDetails findByMeetingId(String meetingId);
+
+	@Query(value = "select * from meetingdetails where topic=?1",nativeQuery = true)
+	List<MeetingDetails> findByTopic(String topic);
+
+	@Query(value = "select sum(total_hours) from meetingdetails where (meeting_date between ?1 and ?2) and (meeting_anchor=?3)",nativeQuery=true)
+	int getTotalHours(Date startDate,Date endDate,long eid);
+
+	@Query(value = "select meeting_id from meetingdetails where meeting_date between ?1 and ?2",nativeQuery=true)
+	List<String> getMeetingDetailsBetweenDate(Date startDate,Date endDate);
+
+	@Query(value = "select * from meetingdetails where meeting_date between ?1 and ?2",nativeQuery=true)
+	List<MeetingDetails> getMeetingDetailsOfNext2Week(Date startDate,Date endDate);
 
 }

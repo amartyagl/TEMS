@@ -5,16 +5,15 @@ import java.sql.Date;
 import java.util.List;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.Data;
 
 @Entity
-
+@Data
 @Table(name = "meetingdetails")
 public class MeetingDetails implements Serializable {
 
@@ -27,56 +26,8 @@ public class MeetingDetails implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "meetingAnchor")
 	private Employee meetingAnchor;
-	private String totalHours;
+	private Double totalHours;
 	@OneToMany(mappedBy = "mid")
 	private List<ParticipantOfMeeting> participantOfMeetings;
-
-	public String getMeetingId() {
-		return meetingId;
-	}
-
-	public void setMeetingId(String meetingId) {
-		this.meetingId = meetingId;
-	}
-
-	public Date getMeetingDate() {
-		return meetingDate;
-	}
-
-	public void setMeetingDate(Date meetingDate) {
-		this.meetingDate = meetingDate;
-	}
-
-	public String getTopic() {
-		return topic;
-	}
-
-	public void setTopic(String topic) {
-		this.topic = topic;
-	}
-
-	public Employee getMeetingAnchor() {
-		return meetingAnchor;
-	}
-
-	public void setMeetingAnchor(Employee meetingAnchor) {
-		this.meetingAnchor = meetingAnchor;
-	}
-
-	public String getTotalHours() {
-		return totalHours;
-	}
-
-	public void setTotalHours(String totalHours) {
-		this.totalHours = totalHours;
-	}
-
-	public List<ParticipantOfMeeting> getParticipantOfMeetings() {
-		return participantOfMeetings;
-	}
-
-	public void setParticipantOfMeetings(List<ParticipantOfMeeting> participantOfMeetings) {
-		this.participantOfMeetings = participantOfMeetings;
-	}
 
 }

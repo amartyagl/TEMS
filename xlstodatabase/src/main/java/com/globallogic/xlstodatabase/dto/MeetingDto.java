@@ -16,6 +16,7 @@ public class MeetingDto implements Serializable {
 	private String timeExited;
 	private String meetingDate;
 
+
 	public String getMeetingDate() {
 		return meetingDate;
 	}

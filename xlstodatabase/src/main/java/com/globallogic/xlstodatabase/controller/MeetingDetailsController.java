@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.globallogic.xlstodatabase.dto.SmeTopicDto;
 import com.globallogic.xlstodatabase.service.MeetingDetailsService;
 
+import java.text.ParseException;
+
 @RestController
 public class MeetingDetailsController {
 
@@ -33,7 +35,11 @@ public class MeetingDetailsController {
 	public ResponseEntity<Object> getMeetingDetailsSpecificSme(@RequestParam Long smeId) {
 		logger.info("Request for getMeetingDetailsSpecificSme {}",smeId);
 		return new ResponseEntity<Object>(meetingDetailsService.getMeetingDetailsSpecificSME(smeId), HttpStatus.OK);
-
+	}
+	@GetMapping(value = "/v1/getMeetingDetailsofNext2Week")
+	public ResponseEntity<Object> getMeetingDetailsofNext2Week() throws ParseException {
+		logger.info("Request for getMeetingDetailsofNext2Week");
+		return new ResponseEntity<Object>(meetingDetailsService.getMeetingDetailsFor2Week(), HttpStatus.OK);
 	}
 
 

@@ -10,4 +10,5 @@ public class AssesmentScoreDto {
     private String lastName;
     private String email;
     private String assesmentScore;
+    private String meetingId;
 }

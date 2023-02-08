@@ -8,12 +8,8 @@ import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.globallogic.xlstodatabase.dto.MeetingDto;
-import com.globallogic.xlstodatabase.service.ParticipantsOfMeetingService;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
@@ -68,12 +64,10 @@ public class GoogleApiUtil {
 			throws IOException, GeneralSecurityException {
 		int count = 0;
 		List<List<MeetingDto>> dataListToBeSaved= new ArrayList<>();
-		//MeetingService meetingService = new MeetingService();
 		for (String id : idsList) {
-			final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport(); // final
-			// String spreadsheetId = "1QNAE6eympfNkC4KsQ7oU68Dya5fqpQnS5RUuPafePAg"; final
+			final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
 			String spreadsheetId = id;
-			final String range = "Attendees!A2:F";
+			final String range = "Attendees!A2:G";
 			Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
 					.setApplicationName(APPLICATION_NAME).build();
 			ValueRange response = service.spreadsheets().values().get(spreadsheetId, range).execute();
@@ -88,7 +82,7 @@ public class GoogleApiUtil {
 					meeting.setEmail(String.valueOf(row.get(2)));
 					meeting.setFirstName(String.valueOf(row.get(0)));
 					meeting.setLastName(String.valueOf(row.get(1)));
-					meeting.setMeetingId((spreedSheetName.get(count)).substring(16,28).trim());
+					meeting.setMeetingId((spreedSheetName.get(count)).substring(16,29).trim());
 					meeting.setTimeExited(String.valueOf(row.get(5)));
 					meeting.setTimeJoined(String.valueOf(row.get(4)));
 					meeting.setMeetingDate((spreedSheetName.get(count)).substring(0,10).trim());

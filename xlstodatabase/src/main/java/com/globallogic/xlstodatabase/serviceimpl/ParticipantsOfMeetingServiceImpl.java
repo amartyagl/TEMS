@@ -1,12 +1,11 @@
 package com.globallogic.xlstodatabase.serviceimpl;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import com.globallogic.xlstodatabase.dto.AssesmentScoreDto;
+import com.globallogic.xlstodatabase.dto.EmployeeDto;
+import com.globallogic.xlstodatabase.service.EmployeeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,10 +38,14 @@ public class ParticipantsOfMeetingServiceImpl implements ParticipantsOfMeetingSe
 	ParticipantsofMeetingRepository participantsofMeetingRepository;
 
 	@Autowired
+	EmployeeService employeeService;
+
+	@Autowired
 	DriveQuickstart driveQuickstart;
 
 	@Autowired
 	EmployeeRepository employeeRepository;
+
 
 	@Override
 	public Object saveExcel() {
@@ -68,7 +71,7 @@ public class ParticipantsOfMeetingServiceImpl implements ParticipantsOfMeetingSe
 			meetingDetails.setMeetingDate(Utility.stringToDate(listData.get(0).getMeetingDate()));
 			meetingDetails.setMeetingId(listData.get(0).getMeetingId());
 			meetingDetails.setTopic(null);
-			meetingDetails.setTotalHours(null);
+			meetingDetails.setTotalHours(0);
 			meetingDetails.setMeetingAnchor(null);
 			MeetingDetails savedMeetingDetails = meetingDetailsRepository.save(meetingDetails);
 			for (MeetingDto meetingDto : listData) {
@@ -127,7 +130,7 @@ public class ParticipantsOfMeetingServiceImpl implements ParticipantsOfMeetingSe
 
 	}
 
-	public Object getParticipantsByMeetingId(String meetingId) {
+	public List<MeetingDto> getParticipantsByMeetingId(String meetingId) {
 		try {
 			logger.info("Inside getByMeetingId of MeetingService");
 			List<ParticipantOfMeeting> dataFromRepo = participantsofMeetingRepository.findByMid(meetingId);
@@ -149,7 +152,7 @@ public class ParticipantsOfMeetingServiceImpl implements ParticipantsOfMeetingSe
 					responseList.add(meetingDto);
 				}
 			}
-			return new Response<>(responseList, "1", "Data fetched successfully");
+			return responseList;
 		} catch (Exception e) {
 			String errorMsg = MessageFormat.format("Exception caught in getByMeetingId of MeetingService :{0}", e);
 			logger.error(errorMsg);
@@ -170,6 +173,7 @@ public class ParticipantsOfMeetingServiceImpl implements ParticipantsOfMeetingSe
 					scoreDto.setLastName(employeeData.getLastName());
 					scoreDto.setEid(employeeData.getEid());
 					scoreDto.setEmail(employeeData.getEmail());
+					scoreDto.setMeetingId(meetingId);
 					scoreDto.setAssesmentScore(particpant.getAssesmentScore());
 					responseList.add(scoreDto);
 				}
@@ -180,6 +184,57 @@ public class ParticipantsOfMeetingServiceImpl implements ParticipantsOfMeetingSe
 			logger.error(errorMsg);
 			throw new ExcelReadingException(errorMsg);
 		}
+	}
+	public List<EmployeeDto> listOfAbsentees(String meetingId)
+	{
+		List<MeetingDto> presentList=getParticipantsByMeetingId(meetingId);
+		List<String> presentListEmails=new ArrayList<>();
+		for(MeetingDto meetingDto:presentList)
+		{
+			presentListEmails.add(meetingDto.getEmail());
+		}
+		List<EmployeeDto> allEmployees=employeeService.getAllEmployee();
+		Iterator<EmployeeDto> employeeIterator=allEmployees.listIterator();
+		while (employeeIterator.hasNext())
+		{
+			EmployeeDto employeeDto=employeeIterator.next();
+			if(presentListEmails.contains(employeeDto.getEmail()))
+			{
+				employeeIterator.remove();
+			}
+
+		}
+		return allEmployees;
+	}
+
+	public Object getAssesmentScoreByMeetingIdAndEid(String eid,String meetingId) {
+		try {
+			logger.info("Inside getAssesmentScoreByMeetingIdAndEid of ParticipantsOfMeetingServiceImpl");
+			ParticipantOfMeeting dataFromRepo = participantsofMeetingRepository.findByMidAndEid(meetingId,eid);
+					Employee employeeData = dataFromRepo.getEid();
+					AssesmentScoreDto scoreDto = new AssesmentScoreDto();
+					scoreDto.setFirstName(employeeData.getFirstName());
+					scoreDto.setLastName(employeeData.getLastName());
+					scoreDto.setEid(employeeData.getEid());
+					scoreDto.setEmail(employeeData.getEmail());
+					scoreDto.setMeetingId(meetingId);
+					scoreDto.setAssesmentScore(dataFromRepo.getAssesmentScore());
+					return scoreDto;
+		} catch (Exception e) {
+			String errorMsg = MessageFormat.format("Exception caught in getAssesmentScoreByMeetingIdAndEid of ParticipantsOfMeetingServiceImpl :{0}", e);
+			logger.error(errorMsg);
+			throw new ExcelReadingException(errorMsg);
+		}
+	}
+
+	@Override
+	public Object getParticipantsDetailsBetweenParticularDate(long eid, Date fromDate, Date toDate) {
+		logger.info("Inside getParticipantsDetailsBetweenParticularDate of ParticipantsOfMeetingServiceImpl");
+		Map<String,Object> responseMap=new HashMap<>();
+		responseMap.put("EmployeeID",eid);
+		responseMap.put("SessionAttended",participantsofMeetingRepository.countSeesionAttened(fromDate,toDate,eid));
+		responseMap.put("AverageScore",participantsofMeetingRepository.getAverageScore(fromDate,toDate,eid));
+		return responseMap;
 	}
 
 }

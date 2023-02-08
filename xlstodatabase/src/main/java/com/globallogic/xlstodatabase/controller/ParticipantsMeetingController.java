@@ -3,13 +3,16 @@ package com.globallogic.xlstodatabase.controller;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.Date;
 
+import com.globallogic.xlstodatabase.dto.EmployeeHoursDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -49,8 +52,24 @@ public class ParticipantsMeetingController {
                 meetingId);
         return new ResponseEntity<Object>(participantsOfMeetingService.getParticipantsAssesmentScoreByMeetingId(meetingId), HttpStatus.OK);
     }
-    
-    
-    
-    
+
+    @GetMapping("/getAbsenteesByMeetingId")
+    public ResponseEntity<Object> getAbsentees(@RequestParam String meetingId) {
+        logger.info("Request for getAllParticipants of MeetingController :{}",
+                meetingId);
+        return new ResponseEntity<Object>(participantsOfMeetingService.listOfAbsentees(meetingId), HttpStatus.OK);
+    }
+    @GetMapping("/getScoreByMeetingIdAndEid")
+    public ResponseEntity<Object> getScoreByMeetingIdAndEid(@RequestParam String meetingId,@RequestParam String eid) {
+        logger.info("Request for getAllParticipants of MeetingController :{}",
+                meetingId);
+        return new ResponseEntity<Object>(participantsOfMeetingService.getAssesmentScoreByMeetingIdAndEid(eid,meetingId), HttpStatus.OK);
+    }
+
+    @GetMapping("/getParticipantsDetailsBetweenParticularDate")
+    public ResponseEntity<Object> getParticipantsDetailsBetweenParticularDate(@RequestBody EmployeeHoursDto employeeHoursDto) {
+        logger.info("Request for getParticipantsDetailsBetweenParticularDate of MeetingController :{}",
+                employeeHoursDto.getEid());
+        return new ResponseEntity<Object>(participantsOfMeetingService.getParticipantsDetailsBetweenParticularDate(employeeHoursDto.getEid(),employeeHoursDto.getStartDate(),employeeHoursDto.getEndDate()), HttpStatus.OK);
+    }
 }

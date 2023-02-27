@@ -3,7 +3,6 @@ package com.globallogic.xlstodatabase.controller;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.Date;
 
 import com.globallogic.xlstodatabase.dto.EmployeeHoursDto;
 import org.slf4j.Logger;
@@ -27,49 +26,49 @@ public class ParticipantsMeetingController {
     ParticipantsOfMeetingService participantsOfMeetingService;
 
     @GetMapping("/meeting/upload")
-    public ResponseEntity<Object> upload() throws GeneralSecurityException, IOException {
+    public ResponseEntity<Object> upload() {
         logger.info("Request for upload of MeetingController");
-        return new ResponseEntity<Object>(participantsOfMeetingService.saveExcel(), HttpStatus.OK);
+        return new ResponseEntity<>(participantsOfMeetingService.saveExcel(), HttpStatus.OK);
     }
 
     @GetMapping("/participants")
     public ResponseEntity<Object> getAllParticipants() {
         logger.info("Request for getAllParticipants of MeetingController");
         return
-                new ResponseEntity<Object>(participantsOfMeetingService.getAllMeetingsParticipantsList(), HttpStatus.OK);
+                new ResponseEntity<>(participantsOfMeetingService.getAllMeetingsParticipantsList(), HttpStatus.OK);
     }
 
     @GetMapping("/getParticipantsByMeetingId")
     public ResponseEntity<Object> getByMeetingId(@RequestParam String meetingId) {
         logger.info("Request for getAllParticipants of MeetingController :{}",
                 meetingId);
-        return new ResponseEntity<Object>(participantsOfMeetingService.getParticipantsByMeetingId(meetingId), HttpStatus.OK);
+        return new ResponseEntity<>(participantsOfMeetingService.getParticipantsByMeetingId(meetingId), HttpStatus.OK);
     }
 
     @GetMapping("/getParticipantsScoreByMeetingId")
     public ResponseEntity<Object> getScoreByMeetingId(@RequestParam String meetingId) {
         logger.info("Request for getAllParticipants of MeetingController :{}",
                 meetingId);
-        return new ResponseEntity<Object>(participantsOfMeetingService.getParticipantsAssesmentScoreByMeetingId(meetingId), HttpStatus.OK);
+        return new ResponseEntity<>(participantsOfMeetingService.getParticipantsAssesmentScoreByMeetingId(meetingId), HttpStatus.OK);
     }
 
     @GetMapping("/getAbsenteesByMeetingId")
     public ResponseEntity<Object> getAbsentees(@RequestParam String meetingId) {
         logger.info("Request for getAllParticipants of MeetingController :{}",
                 meetingId);
-        return new ResponseEntity<Object>(participantsOfMeetingService.listOfAbsentees(meetingId), HttpStatus.OK);
+        return new ResponseEntity<>(participantsOfMeetingService.listOfAbsentees(meetingId), HttpStatus.OK);
     }
     @GetMapping("/getScoreByMeetingIdAndEid")
-    public ResponseEntity<Object> getScoreByMeetingIdAndEid(@RequestParam String meetingId,@RequestParam String eid) {
+    public ResponseEntity<Object> getScoreByMeetingIdAndEid(@RequestParam String meetingId,@RequestParam Long eid) {
         logger.info("Request for getAllParticipants of MeetingController :{}",
                 meetingId);
-        return new ResponseEntity<Object>(participantsOfMeetingService.getAssesmentScoreByMeetingIdAndEid(eid,meetingId), HttpStatus.OK);
+        return new ResponseEntity<>(participantsOfMeetingService.getAssesmentScoreByMeetingIdAndEid(eid,meetingId), HttpStatus.OK);
     }
 
     @GetMapping("/getParticipantsDetailsBetweenParticularDate")
     public ResponseEntity<Object> getParticipantsDetailsBetweenParticularDate(@RequestBody EmployeeHoursDto employeeHoursDto) {
         logger.info("Request for getParticipantsDetailsBetweenParticularDate of MeetingController :{}",
                 employeeHoursDto.getEid());
-        return new ResponseEntity<Object>(participantsOfMeetingService.getParticipantsDetailsBetweenParticularDate(employeeHoursDto.getEid(),employeeHoursDto.getStartDate(),employeeHoursDto.getEndDate()), HttpStatus.OK);
+        return new ResponseEntity<>(participantsOfMeetingService.getParticipantsDetailsBetweenParticularDate(employeeHoursDto.getEid(),employeeHoursDto.getStartDate(),employeeHoursDto.getEndDate()), HttpStatus.OK);
     }
 }

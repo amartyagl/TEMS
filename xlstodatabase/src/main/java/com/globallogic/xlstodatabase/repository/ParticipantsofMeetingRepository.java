@@ -17,7 +17,7 @@ public interface ParticipantsofMeetingRepository extends JpaRepository<Participa
     List<ParticipantOfMeeting> findByMid(String mid);
 
     @Query(value = "select * from participantsofmeeting where mid=?1 and eid=?2", nativeQuery = true)
-    ParticipantOfMeeting findByMidAndEid(String mid, String eid);
+    ParticipantOfMeeting findByMidAndEid(String mid, Long eid);
 
     @Query(value = "select count(*) from participantsofmeeting p inner join meetingdetails m on p.mid=m.meeting_id where (m.meeting_date between ?1 and ?2) and (p.eid=?3)", nativeQuery = true)
     int countSeesionAttened(Date fromDate, Date toDate, long eid);

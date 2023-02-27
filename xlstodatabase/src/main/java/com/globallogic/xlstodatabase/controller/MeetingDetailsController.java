@@ -2,6 +2,7 @@ package com.globallogic.xlstodatabase.controller;
 
 import com.globallogic.xlstodatabase.dto.MeetingDetailsDto;
 import com.globallogic.xlstodatabase.exception.EmployeeNotFound;
+import com.globallogic.xlstodatabase.exception.MeetingNotExist;
 import com.globallogic.xlstodatabase.exception.SMESubjectAvailiability;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +18,8 @@ import com.globallogic.xlstodatabase.dto.SmeTopicDto;
 import com.globallogic.xlstodatabase.service.MeetingDetailsService;
 
 import java.text.ParseException;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 public class MeetingDetailsController {
@@ -46,11 +49,21 @@ public class MeetingDetailsController {
 		logger.info("Request for getMeetingDetailsSpecificSme {}",smeId);
 		return new ResponseEntity<Object>(meetingDetailsService.getMeetingDetailsSpecificSME(smeId), HttpStatus.OK);
 	}
-	@GetMapping(value = "/v1/getMeetingDetailsofNext2Week")
-	public ResponseEntity<Object> getMeetingDetailsofNext2Week() throws ParseException {
-		logger.info("Request for getMeetingDetailsofNext2Week");
-		return new ResponseEntity<Object>(meetingDetailsService.getMeetingDetailsFor2Week(), HttpStatus.OK);
+	@GetMapping(value = "/v1/getMeetingDetailsOfNext2Week")
+	public ResponseEntity<List<MeetingDetailsDto>> getMeetingDetailsofNext2Week() throws ParseException, MeetingNotExist {
+		logger.info("Request for getMeetingDetailsOfNext2Week");
+		return new ResponseEntity<List<MeetingDetailsDto>>(meetingDetailsService.getMeetingDetailsFor2Week(), HttpStatus.OK);
 	}
-
+	@GetMapping(value = "/v1/getLeaderboard")
+	public ResponseEntity<Map<String,Object>> getLeaderboard() throws ParseException {
+		logger.info("Request for getLeaderboard");
+		return new ResponseEntity<Map<String,Object>>(meetingDetailsService.getLeaderBoard(), HttpStatus.OK);
+	}
+	@GetMapping(value = "/v1/getAllMeetings")
+	ResponseEntity<List<MeetingDetailsDto>> getAllMeetings()
+	{
+		logger.info("Request for getting all the meetings list");
+		return new ResponseEntity<List<MeetingDetailsDto>>(meetingDetailsService.getAllMeetings(),HttpStatus.OK);
+	}
 
 }

@@ -25,5 +25,8 @@ public class Employee implements Serializable {
 	private List<ParticipantOfMeeting> participantsOfMeeting;
 	@OneToMany(mappedBy = "eid")
 	private List<SMEDetails> smeDetails;
+
+	@OneToMany(mappedBy = "eid")
+	private List<RegisteredEmployee> registeredEmployees;
 }
 

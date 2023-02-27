@@ -2,6 +2,7 @@ package com.globallogic.xlstodatabase.service;
 
 import com.globallogic.xlstodatabase.dto.EmployeeHoursDto;
 import com.globallogic.xlstodatabase.exception.MeetingNotExist;
+import com.globallogic.xlstodatabase.exception.SMESubjectAvailiability;
 import com.globallogic.xlstodatabase.modal.Employee;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
@@ -19,7 +20,7 @@ public interface EmployeeService {
 	 Object getSmeDetails(String getSmeByMeetingId) throws MeetingNotExist;
 	 List<EmployeeDto> getAllEmployee();
 	 EmployeeHoursDto getTotalHours(EmployeeHoursDto employeeHoursDto);
-	 Set<EmployeeDto> getSmeDetailsByTopic(String topic);
+	 Set<EmployeeDto> getSmeDetailsByTopic(String topic) throws SMESubjectAvailiability;
 
 
 

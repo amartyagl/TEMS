@@ -2,6 +2,7 @@ package com.globallogic.xlstodatabase.serviceimpl;
 
 import com.globallogic.xlstodatabase.dto.EmployeeHoursDto;
 import com.globallogic.xlstodatabase.exception.MeetingNotExist;
+import com.globallogic.xlstodatabase.exception.SMESubjectAvailiability;
 import org.apache.poi.xssf.XLSBUnsupportedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +33,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 	
 	@Autowired
 	MeetingDetailsRepository meetingDetailsRepository;
-	
+
 	Logger logger= LoggerFactory.getLogger(EmployeeServiceImpl.class);
 	
 	
@@ -94,17 +95,19 @@ public class EmployeeServiceImpl implements EmployeeService{
 
 	@Override
 	public EmployeeHoursDto getTotalHours(EmployeeHoursDto employeeHoursDto) {
+		logger.info("Inside getTotalHours of EmployeeServiceImpl");
 		int totalHours=meetingDetailsRepository.getTotalHours(employeeHoursDto.getStartDate(),employeeHoursDto.getEndDate(),employeeHoursDto.getEid());
 		employeeHoursDto.setTotalHours(totalHours);
 		return employeeHoursDto;
 	}
 
 	@Override
-	public Set<EmployeeDto> getSmeDetailsByTopic(String topic) {
+	public Set<EmployeeDto> getSmeDetailsByTopic(String topic) throws SMESubjectAvailiability {
+		logger.info("Inside getTotalHours of getSmeDetailsByTopic");
 		List<MeetingDetails> meetingDetailsList= meetingDetailsRepository.findByTopic(topic);
 		Set<EmployeeDto> smeDetails=new HashSet<>();
 		if(meetingDetailsList.isEmpty()) {
-			throw new ExcelReadingException("No employee exist for this topic");
+			throw new SMESubjectAvailiability("No employee exist for this topic");
 		}
 		for(MeetingDetails meetingDetails:meetingDetailsList) {
 			Employee employee = meetingDetails.getMeetingAnchor();
@@ -118,7 +121,6 @@ public class EmployeeServiceImpl implements EmployeeService{
 			smeDetails.add(employeeDto);
 		}
 		return smeDetails;
-
 	}
 
 }

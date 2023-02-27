@@ -15,6 +15,6 @@ public interface ParticipantsOfMeetingService {
 	List<MeetingDto> getParticipantsByMeetingId(String meetingId);
 	Object getParticipantsAssesmentScoreByMeetingId(String meetingId);
 	List<EmployeeDto> listOfAbsentees(String meetingId);
-	Object getAssesmentScoreByMeetingIdAndEid(String eid,String meetingId);
+	Object getAssesmentScoreByMeetingIdAndEid(Long eid,String meetingId);
 	Object getParticipantsDetailsBetweenParticularDate(long eid, Date fromDate, Date toDate);
 }

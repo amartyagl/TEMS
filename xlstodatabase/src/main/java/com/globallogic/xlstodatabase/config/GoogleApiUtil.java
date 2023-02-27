@@ -67,7 +67,7 @@ public class GoogleApiUtil {
 		for (String id : idsList) {
 			final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
 			String spreadsheetId = id;
-			final String range = "Attendees!A2:G";
+			final String range = "Attendees!A2:F";
 			Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
 					.setApplicationName(APPLICATION_NAME).build();
 			ValueRange response = service.spreadsheets().values().get(spreadsheetId, range).execute();
@@ -94,5 +94,33 @@ public class GoogleApiUtil {
 		}
 		return dataListToBeSaved;
 	}
-
+	public List<List<MeetingDto>> getAssesmentScore(List<String> idsList, List<String> spreedSheetName)
+			throws IOException, GeneralSecurityException {
+		int count = 0;
+		List<List<MeetingDto>> dataListToBeSaved= new ArrayList<>();
+		for (String id : idsList) {
+			final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+			String spreadsheetId = id;
+			final String range = "A2:D";
+			Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+					.setApplicationName(APPLICATION_NAME).build();
+			ValueRange response = service.spreadsheets().values().get(spreadsheetId, range).execute();
+			List<List<Object>> values = response.getValues();
+			List<MeetingDto> paticipantsList = new ArrayList<>();
+			if (values == null || values.isEmpty()) {
+				System.out.println("No data found.");
+			} else {
+				for (List row : values) {
+					MeetingDto meeting = new MeetingDto();
+					meeting.setAssessmentScore(String.valueOf(row.get(3)));
+					meeting.setMeetingId((spreedSheetName.get(count)).substring(16,29).trim());
+					meeting.setEmail(String.valueOf(row.get(2)));
+					paticipantsList.add(meeting);
+				}
+				dataListToBeSaved.add(paticipantsList);
+				count++;
+			}
+		}
+		return dataListToBeSaved;
+	}
 }

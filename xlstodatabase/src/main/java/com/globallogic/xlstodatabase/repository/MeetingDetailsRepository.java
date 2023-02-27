@@ -28,10 +28,15 @@ public interface MeetingDetailsRepository extends JpaRepository<MeetingDetails, 
 	@Query(value = "select sum(total_hours) from meetingdetails where (meeting_date between ?1 and ?2) and (meeting_anchor=?3)",nativeQuery=true)
 	int getTotalHours(Date startDate,Date endDate,long eid);
 
-	@Query(value = "select meeting_id from meetingdetails where meeting_date between ?1 and ?2",nativeQuery=true)
-	List<String> getMeetingDetailsBetweenDate(Date startDate,Date endDate);
-
 	@Query(value = "select * from meetingdetails where meeting_date between ?1 and ?2",nativeQuery=true)
-	List<MeetingDetails> getMeetingDetailsOfNext2Week(Date startDate,Date endDate);
+	List<MeetingDetails> getMeetingDetailsBetweenDates(Date startDate,Date endDate);
 
+	@Query(value = "select count(distinct(meeting_id)) from meetingdetails where meeting_date between ?1 and ?2",nativeQuery=true)
+	int getMeetingAnchorCountBetweenDates(Date startDate,Date endDate);
+
+	@Query(value = "select total_hours from meetingdetails where meeting_date between ?1 and ?2",nativeQuery=true)
+	List<String> getTotalHoursBetweenDates(Date startDate,Date endDate);
+
+	@Query(value = "select count(*) from meetingdetails m inner join participantsofmeeting p on p.mid=m.meeting_id where m.meeting_date between ?1 and ?2",nativeQuery = true)
+	int totalParticipantsBetweenDates(Date startDate,Date endDate);
 }

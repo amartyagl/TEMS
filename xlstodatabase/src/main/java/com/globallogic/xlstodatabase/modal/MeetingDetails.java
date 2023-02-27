@@ -26,8 +26,11 @@ public class MeetingDetails implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "meetingAnchor")
 	private Employee meetingAnchor;
-	private Double totalHours;
+	private String totalHours;
 	@OneToMany(mappedBy = "mid")
 	private List<ParticipantOfMeeting> participantOfMeetings;
+
+	@OneToMany(mappedBy = "mid")
+	private List<RegisteredEmployee> registeredEmployees;
 
 }

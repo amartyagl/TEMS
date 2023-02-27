@@ -12,6 +12,6 @@ public class MeetingDetailsDto implements Serializable {
 	private String meetingId;
 	private String topic;
 	private String meetingDate;
-	private Double hours;
+	private String hours;
 
 }

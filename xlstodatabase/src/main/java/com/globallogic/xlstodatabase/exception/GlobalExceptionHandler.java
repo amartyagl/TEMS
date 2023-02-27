@@ -1,30 +1,45 @@
 package com.globallogic.xlstodatabase.exception;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-	Logger logger = LoggerFactory.getLogger(ResponseEntityExceptionHandler.class);
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	@ExceptionHandler(EmployeeNotFound.class)
+	public Map<String, String> handleEmployeeNotFoundException(EmployeeNotFound exception) {
+		Map<String, String> errorMap = new HashMap<>();
+		log.error("Employee not found {}", exception.getMessage());
+		errorMap.put("errorMessage", exception.getMessage());
+		return errorMap;
+	}
+
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(ExcelReadingException.class)
+	public Map<String, String> excelReadingExceptionException(ExcelReadingException exception) {
+		Map<String, String> errorMap = new HashMap<>();
+		log.error("error in reading excel {}", exception.getMessage());
+		errorMap.put("errorMessage", exception.getMessage());
+		return errorMap;
+	}
 
 
+
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(Exception.class)
-	public final ResponseEntity<Object> ResponseEntityExceptionHandler(Exception ex, WebRequest request)
-			throws Exception {
-		logger.info("Inside ResponseEntityExceptionHandler of GlobalExceptionHandler");
-		ErrorDetails errorDetails = new ErrorDetails();
-		errorDetails.setErrorCode("0");
-		errorDetails.setErrorDetails(ex.getMessage());
-		return new ResponseEntity<Object>(new Response<Object>(errorDetails, "0"), HttpStatus.INTERNAL_SERVER_ERROR);
-
+	public Map<String, String> handleParentException(Exception exception) {
+		Map<String, String> errorMap = new HashMap<>();
+		log.error("Some error occurred {}", exception.getMessage());
+		errorMap.put("errorMessage", exception.getMessage());
+		return errorMap;
 	}
 }

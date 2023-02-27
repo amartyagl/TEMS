@@ -102,6 +102,8 @@ public class DriveQuickstart {
 			}
 			List<String> idsOfSpreadSheet = new ArrayList<>();
 			List<String> namesOfSpreadSheet = new ArrayList<>();
+			List<String> quizSpreadSheetId = new ArrayList<>();
+			List<String> quizSpreadSheetName = new ArrayList<>();
 			String query = "'" + id + "' in parents";
 			FileList result1 = service.files().list().setQ(query).setPageSize(100)
 					.setFields("nextPageToken, files(id, name)").execute();
@@ -111,7 +113,6 @@ public class DriveQuickstart {
 				System.out.println("No Files Found");
 			} else {
 				for (File f1 : filesInFolderMeetingReports) {
-					System.out.println("folder is" + f1.getName());
 					allFoldersIdInsideMeetingReports.add(f1.getId());
 				}
 			}
@@ -121,27 +122,77 @@ public class DriveQuickstart {
 						.setFields("nextPageToken, files(id, name)").execute();
 				List<File> allSpreadSheets = spreadSheets.getFiles();
 				for (File file : allSpreadSheets) {
-					idsOfSpreadSheet.add(file.getId());
-					namesOfSpreadSheet.add(file.getName());
-					System.out.println("file is" + file.getName());
+					if (file.getName().contains("Attendance")) {
+						idsOfSpreadSheet.add(file.getId());
+						namesOfSpreadSheet.add(file.getName());
+					}
+					if ((file.getName().contains("Quiz")))
+					{
+						quizSpreadSheetId.add(file.getId());
+						quizSpreadSheetName.add(file.getName());
+					}
 				}
 			}
 			logger.info("Calling get Spread Sheet Data from Google Api Utils");
 			GoogleApiUtil googleApiUtil = new GoogleApiUtil();
-			return googleApiUtil.getSpreadSheetData(idsOfSpreadSheet, namesOfSpreadSheet);
-		} catch (IOException io) {
-			io.printStackTrace();
-			String errorMsg = MessageFormat.format("Exception caught in getFilesFromDrive of DriverQuickStart :{0}",
-					io);
-			throw new ExcelReadingException(errorMsg);
-		} catch (GeneralSecurityException ge) {
-			ge.printStackTrace();
-			String errorMsg = MessageFormat.format("Exception caught in getFilesFromDrive of DriverQuickStart :{0}",
-					ge);
-			throw new ExcelReadingException(errorMsg);
+			List<List<MeetingDto>> spreadsheet= googleApiUtil.getSpreadSheetData(idsOfSpreadSheet, namesOfSpreadSheet);
+			List<List<MeetingDto>> scoreSpreadsheet=googleApiUtil.getAssesmentScore(quizSpreadSheetId,quizSpreadSheetName);
+			return  spreadsheet;
 		} catch (Exception e) {
-			e.printStackTrace();
-			e.printStackTrace();
+			String errorMsg = MessageFormat.format("Exception caught in getFilesFromDrive of DriverQuickStart :{0}", e);
+			throw new ExcelReadingException(errorMsg);
+		}
+	}
+	public List<List<MeetingDto>> getScoreSheetFromDrive() throws IOException, GeneralSecurityException {
+		try {
+			logger.info("Inside getScoreSheetFromDrive of DriveQuickStart");
+			final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+			Drive service = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+					.setApplicationName(APPLICATION_NAME).build();
+			FileList result = service.files().list().setQ("mimeType='application/vnd.google-apps.folder'")
+					.setPageSize(100).setFields("nextPageToken, files(id, name)").execute();
+			List<File> files = result.getFiles();
+			String id = null;
+			for (File f : files) {
+				if (f.getName().equals("Meeting Reports")) {
+					id = f.getId();
+				}
+			}
+			if (id == null) {
+				throw new ExcelReadingException("SpreadSheet Folder Does Not Exist");
+			}
+			List<String> quizSpreadSheetId = new ArrayList<>();
+			List<String> quizSpreadSheetName = new ArrayList<>();
+			String query = "'" + id + "' in parents";
+			FileList result1 = service.files().list().setQ(query).setPageSize(100)
+					.setFields("nextPageToken, files(id, name)").execute();
+			List<File> filesInFolderMeetingReports = result1.getFiles();
+			List<String> allFoldersIdInsideMeetingReports = new ArrayList<>();
+			if (filesInFolderMeetingReports == null || filesInFolderMeetingReports.isEmpty()) {
+				System.out.println("No Files Found");
+			} else {
+				for (File f1 : filesInFolderMeetingReports) {
+					allFoldersIdInsideMeetingReports.add(f1.getId());
+				}
+			}
+			for (String folderInsideMr : allFoldersIdInsideMeetingReports) {
+				String queryForInsideFolder = "'" + folderInsideMr + "' in parents";
+				FileList spreadSheets = service.files().list().setQ(queryForInsideFolder).setPageSize(100)
+						.setFields("nextPageToken, files(id, name)").execute();
+				List<File> allSpreadSheets = spreadSheets.getFiles();
+				for (File file : allSpreadSheets) {
+					if ((file.getName().contains("Quiz")))
+					{
+						quizSpreadSheetId.add(file.getId());
+						quizSpreadSheetName.add(file.getName());
+					}
+				}
+			}
+			logger.info("Calling get Spread Sheet Data from Google Api Utils");
+			GoogleApiUtil googleApiUtil = new GoogleApiUtil();
+			List<List<MeetingDto>> scoreSpreadsheet=googleApiUtil.getAssesmentScore(quizSpreadSheetId,quizSpreadSheetName);
+			return  scoreSpreadsheet;
+		} catch (Exception e) {
 			String errorMsg = MessageFormat.format("Exception caught in getFilesFromDrive of DriverQuickStart :{0}", e);
 			throw new ExcelReadingException(errorMsg);
 		}

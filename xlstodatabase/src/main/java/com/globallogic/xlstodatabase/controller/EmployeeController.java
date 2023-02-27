@@ -2,6 +2,7 @@ package com.globallogic.xlstodatabase.controller;
 
 import com.globallogic.xlstodatabase.dto.EmployeeHoursDto;
 import com.globallogic.xlstodatabase.exception.MeetingNotExist;
+import com.globallogic.xlstodatabase.exception.SMESubjectAvailiability;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,7 @@ public class EmployeeController {
 	}
 
 	@GetMapping(value="/v1/getSmeByTopic")
-	public ResponseEntity<Object> getSmeByTopic(@RequestParam String topic){
+	public ResponseEntity<Object> getSmeByTopic(@RequestParam String topic) throws SMESubjectAvailiability {
 		logger.info("Request for getSmeByTopic {}", topic);
 		return new ResponseEntity<Object>(employeeService.getSmeDetailsByTopic(topic),HttpStatus.OK);
 

@@ -16,7 +16,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDao {
+public class User {
 
 	@Id
 	@Column(name = "emailId", unique = true, nullable = false, length = 100)

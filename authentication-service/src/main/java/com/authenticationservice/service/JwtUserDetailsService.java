@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 
-import com.authenticationservice.model.UserDao;
+import com.authenticationservice.model.User;
 import com.authenticationservice.dto.UserDto;
 import com.authenticationservice.repository.UserRepository;
 
@@ -24,8 +24,8 @@ public class JwtUserDetailsService {
 	@Autowired
 	private UserRepository userDao;
 
-	public UserDao save(UserDto user) {
-		UserDao newUser = new UserDao();
+	public User save(UserDto user) {
+		User newUser = new User();
 		newUser.setEmail(user.getEmail());
 		newUser.setPassword(user.getPassword());
 		return userDao.save(newUser);
@@ -33,7 +33,7 @@ public class JwtUserDetailsService {
 	}
 
 	public String authenticateUser(String email, String password) {
-		UserDao user1 = userDao.findById(email).get();
+		User user1 = userDao.findById(email).get();
 		String jwttoken = "";
 		if (email.equals(user1.getEmail()) && password.equals(user1.getPassword())) {
 			Claims claims = Jwts.claims();

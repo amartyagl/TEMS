@@ -15,6 +15,7 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.io.FileNotFoundException;
@@ -28,6 +29,7 @@ import java.time.Period;
 import java.util.*;
 
 @Component
+@Slf4j
 /* class to demonstarte use of Calendar events list API */
 public class CalendarQuickstart {
     /**
@@ -110,12 +112,15 @@ public class CalendarQuickstart {
 
         String[] recurrence = new String[] {"RRULE:FREQ=DAILY;COUNT=1"};
         event.setRecurrence(Arrays.asList(recurrence));
-
-        EventAttendee[] attendees = new EventAttendee[] {
-                new EventAttendee().setEmail("amartyasingh76@gmail.com"),
-                new EventAttendee().setEmail("amartya.singh@globallogic.com"),
-        };
-        event.setAttendees(Arrays.asList(attendees));
+        List<EventAttendee> attendees=new ArrayList<>();
+        List<String> emails=createMeetingDto.getAttendees();
+        for (String email:emails)
+        {
+            EventAttendee eventAttendee=new EventAttendee();
+            eventAttendee.setEmail(email);
+            attendees.add(eventAttendee);
+        }
+        event.setAttendees(attendees);
 
         EventReminder[] reminderOverrides = new EventReminder[] {
                 new EventReminder().setMethod("email").setMinutes(24 * 60),
@@ -135,6 +140,7 @@ public class CalendarQuickstart {
         conferenceData.setCreateRequest(createConferenceReq);
         event.setConferenceData(conferenceData);
         String calendarId = "primary";
+        log.info("Inside Calendar QuickStart for creating meeting");
         event = service.events().insert(calendarId, event).setConferenceDataVersion(1).setSendUpdates("all").execute();
         long secs = (endDate.getTime() - startDate.getTime()) / 1000;
         long hours = secs / 3600;
@@ -144,7 +150,7 @@ public class CalendarQuickstart {
         meetingDetailsDto.setMeetingId(event.getConferenceData().getConferenceId());
         meetingDetailsDto.setTopic(createMeetingDto.getTopic());
         meetingDetailsDto.setMeetingDate(createMeetingDto.getStartDate());
-        meetingDetailsDto.setHours("timeStr");
+        meetingDetailsDto.setHours(timeStr);
         return meetingDetailsDto;
     }
 }

@@ -47,6 +47,7 @@ public class MeetingDetailsImpl implements MeetingDetailsService {
 
 	@Override
 	public String createMeeting(CreateMeetingDto createMeetingDto) throws Exception {
+		log.info("Inside meeting service impl createMeeting");
 		MeetingDetailsDto meetingDetailsDto=calendarQuickstart.createMeeting(createMeetingDto);
 		MeetingDetails meetingDetails=new MeetingDetails();
 		meetingDetails.setMeetingId(meetingDetailsDto.getMeetingId());

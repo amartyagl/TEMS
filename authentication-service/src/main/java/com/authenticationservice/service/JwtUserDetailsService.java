@@ -25,11 +25,9 @@ public class JwtUserDetailsService {
 	private UserRepository userDao;
 
 	public UserDao save(UserDto user) {
-
 		UserDao newUser = new UserDao();
 		newUser.setEmail(user.getEmail());
 		newUser.setPassword(user.getPassword());
-
 		return userDao.save(newUser);
 
 	}

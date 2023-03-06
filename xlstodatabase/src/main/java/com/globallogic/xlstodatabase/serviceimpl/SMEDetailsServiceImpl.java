@@ -57,7 +57,6 @@ public class SMEDetailsServiceImpl implements SMEDetailsService {
             SMEDetailsDto smeDetailsDto=new SMEDetailsDto();
             smeDetailsDto.setEid(smeDetails.getEid().getEid());
             smeDetailsDto.setTopic(smeDetails.getTopic());
-            smeDetailsDto.setSmeId(smeDetails.getSmeId());
             smeDetailsDtoList.add(smeDetailsDto);
         }
         return smeDetailsDtoList;

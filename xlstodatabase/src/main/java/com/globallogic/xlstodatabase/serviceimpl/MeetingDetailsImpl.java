@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
 
+import com.globallogic.xlstodatabase.config.CalendarQuickstart;
+import com.globallogic.xlstodatabase.dto.CreateMeetingDto;
 import com.globallogic.xlstodatabase.exception.EmployeeNotFound;
 import com.globallogic.xlstodatabase.exception.MeetingNotExist;
 import com.globallogic.xlstodatabase.exception.SMESubjectAvailiability;
@@ -40,29 +42,20 @@ public class MeetingDetailsImpl implements MeetingDetailsService {
 	@Autowired
 	SMEDetailsRepository smeDetailsRepository;
 
+	@Autowired
+	CalendarQuickstart calendarQuickstart;
+
 	@Override
-	public Object createMeeting(MeetingDetailsDto meetingDetailsDto) throws Exception {
+	public String createMeeting(CreateMeetingDto createMeetingDto) throws Exception {
+		MeetingDetailsDto meetingDetailsDto=calendarQuickstart.createMeeting(createMeetingDto);
 		MeetingDetails meetingDetails=new MeetingDetails();
-		Optional<Employee> employee=employeeRepository.findById(meetingDetailsDto.getEid());
-		log.info("in meetingdetailsserviceimpl getting employee details");
-		if(employee.isPresent()) {
-			meetingDetails.setMeetingAnchor(employee.get());
-			meetingDetails.setMeetingDate(Utility.stringToDate(meetingDetailsDto.getMeetingDate()));
-			meetingDetails.setMeetingId(meetingDetailsDto.getMeetingId());
-			meetingDetails.setTotalHours(meetingDetailsDto.getHours());
-			log.info("in meetingdetailsserviceimpl getting meeting details");
-			if(smeDetailsRepository.findyByEidAndTopic(meetingDetailsDto.getEid(), meetingDetailsDto.getTopic().toLowerCase())!=null) {
-				meetingDetails.setTopic(meetingDetailsDto.getTopic().toLowerCase());
-			}
-			else {
-				throw new SMESubjectAvailiability("SME does not have this subject idea assign different subject");
-			}
-			meetingDetailsRepository.save(meetingDetails);
-		}
-		else {
-			throw new EmployeeNotFound("Employee not found with given id");
-		}
-		return meetingDetailsDto;
+		meetingDetails.setMeetingId(meetingDetailsDto.getMeetingId());
+		meetingDetails.setMeetingAnchor(null);
+		meetingDetails.setTopic(meetingDetailsDto.getTopic());
+		meetingDetails.setMeetingDate(Utility.stringToDate(meetingDetailsDto.getMeetingDate()));
+		meetingDetails.setTotalHours(meetingDetailsDto.getHours());
+		meetingDetailsRepository.save(meetingDetails);
+		return "meeting created";
 	}
 
 	@Override

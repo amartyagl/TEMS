@@ -1,5 +1,6 @@
 package com.globallogic.xlstodatabase.controller;
 
+import com.globallogic.xlstodatabase.dto.CreateMeetingDto;
 import com.globallogic.xlstodatabase.dto.MeetingDetailsDto;
 import com.globallogic.xlstodatabase.exception.EmployeeNotFound;
 import com.globallogic.xlstodatabase.exception.MeetingNotExist;
@@ -30,9 +31,9 @@ public class MeetingDetailsController {
 	MeetingDetailsService meetingDetailsService;
 
 	@PostMapping(value = "/v1/addFutureMeeting")
-	public ResponseEntity<String> addMeeting(@RequestBody MeetingDetailsDto meetingDetailsDto) throws Exception {
+	public ResponseEntity<String> addMeeting(@RequestBody CreateMeetingDto createMeetingDto) throws Exception {
 		logger.info("in meetingDetails controller Request for addMeeting ");
-		meetingDetailsService.createMeeting(meetingDetailsDto);
+		meetingDetailsService.createMeeting(createMeetingDto);
 		return new ResponseEntity<String>("Meeting created successfully", HttpStatus.OK);
 	}
 

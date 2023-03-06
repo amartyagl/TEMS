@@ -1,5 +1,6 @@
 package com.globallogic.xlstodatabase.service;
 
+import com.globallogic.xlstodatabase.dto.CreateMeetingDto;
 import com.globallogic.xlstodatabase.dto.MeetingDetailsDto;
 import com.globallogic.xlstodatabase.exception.EmployeeNotFound;
 import com.globallogic.xlstodatabase.exception.MeetingNotExist;
@@ -16,9 +17,10 @@ import java.util.Map;
 @Service
 public interface MeetingDetailsService {
 
-	public Object createMeeting(MeetingDetailsDto meetingDetailsDto) throws Exception;
-	
-	public Object updateSMEAndTopic(SmeTopicDto smeTopicDto) throws EmployeeNotFound, SMESubjectAvailiability;
+
+    String createMeeting(CreateMeetingDto createMeetingDto) throws Exception;
+
+    public Object updateSMEAndTopic(SmeTopicDto smeTopicDto) throws EmployeeNotFound, SMESubjectAvailiability;
 
 	public Object getMeetingDetailsSpecificSME(Long smeId);
 

@@ -1,6 +1,7 @@
 package com.globallogic.xlstodatabase.controller;
 
 import com.globallogic.xlstodatabase.dto.EmployeeHoursDto;
+import com.globallogic.xlstodatabase.exception.EmployeeNotFound;
 import com.globallogic.xlstodatabase.exception.MeetingNotExist;
 import com.globallogic.xlstodatabase.exception.SMESubjectAvailiability;
 import org.slf4j.Logger;
@@ -27,8 +28,22 @@ public class EmployeeController {
 	@PostMapping(value="/addEmployee")
 	public ResponseEntity<Object> addEmployee(@RequestBody EmployeeDto employeeDto){
 		logger.info("Request for addEmployee {}", employeeDto);
-		return new ResponseEntity<Object>(employeeService.addEmployee(employeeDto),HttpStatus.OK);
+		return new ResponseEntity<>(employeeService.addEmployee(employeeDto),HttpStatus.OK);
 		
+	}
+	@PutMapping(value="/updateEmployee")
+	public ResponseEntity<Object> updateEmployee(@RequestBody EmployeeDto employeeDto) throws EmployeeNotFound {
+		logger.info("Request for updateEmployee {}", employeeDto);
+		employeeService.updateEmployee(employeeDto);
+		return new ResponseEntity<>("Employee updated successfully",HttpStatus.OK);
+
+	}
+	@DeleteMapping(value="/deleteEmployee")
+	public ResponseEntity<Object> deleteEmployee(@RequestParam Long eid) throws EmployeeNotFound {
+		logger.info("Request for deleteEmployee {}", eid);
+		employeeService.deleteEmployee(eid);
+		return new ResponseEntity<>("Employee deleted Successfully",HttpStatus.OK);
+
 	}
 	
 	@GetMapping(value="/getSmeByMeetingId")
@@ -53,7 +68,7 @@ public class EmployeeController {
 	@GetMapping(value="/getSmeByTopic")
 	public ResponseEntity<Object> getSmeByTopic(@RequestParam String topic) throws SMESubjectAvailiability {
 		logger.info("Request for getSmeByTopic {}", topic);
-		return new ResponseEntity<Object>(employeeService.getSmeDetailsByTopic(topic),HttpStatus.OK);
+		return new ResponseEntity<>(employeeService.getSmeDetailsByTopic(topic),HttpStatus.OK);
 
 	}
 

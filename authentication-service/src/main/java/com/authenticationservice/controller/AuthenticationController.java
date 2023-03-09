@@ -20,10 +20,6 @@ public class AuthenticationController {
 		log.info(jwtRequest.toString());
 		return ResponseEntity.ok(userDetailsService.authenticateUser(jwtRequest.getEmail(), jwtRequest.getPassword()));
 	}
-	@RequestMapping(value = "/signUp", method = RequestMethod.POST)
-	public ResponseEntity<?> saveUser(@RequestBody UserDto user) throws Exception {
-		return ResponseEntity.ok(userDetailsService.save(user));
-	}
 	@RequestMapping(value = "/welcome", method = RequestMethod.GET)
 	public String getUser() {
 		return "Welcome to Auth controller";

@@ -2,8 +2,10 @@ package com.authenticationservice.service;
 
 import java.util.Date;
 
+import com.authenticationservice.dto.EmployeeDto;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import com.authenticationservice.model.User;
@@ -17,20 +19,24 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Service
 public class JwtUserDetailsService {
 
+
 	private static final int JWT_TOKEN_VALIDITY = 1000*60*60*2;
 
 	private String secret = "dadsnrgsthghdjgmdhgxfxmgfdyjmhgtxgdcjbngkjghchhfjdlshvfishdvuhzsuhvujksdbvkub";
 
 	@Autowired
 	private UserRepository userDao;
-
-	public User save(UserDto user) {
+	@KafkaListener(topics = "gmailTopic",groupId = "group2")
+	public User  consume(EmployeeDto employeeDto)
+	{
 		User newUser = new User();
-		newUser.setEmail(user.getEmail());
-		newUser.setPassword(user.getPassword());
+		newUser.setEmail(employeeDto.getEmail());
+		newUser.setPassword(employeeDto.getPassword());
+		newUser.setRoles(employeeDto.getRoles());
 		return userDao.save(newUser);
 
 	}
+
 
 	public String authenticateUser(String email, String password) {
 		User user1 = userDao.findById(email).get();

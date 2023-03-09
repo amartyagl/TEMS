@@ -9,8 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/v1/api")
 @Slf4j
+@CrossOrigin
+@RequestMapping(value = "authenticate")
 public class AuthenticationController {
 	@Autowired
 	private JwtUserDetailsService userDetailsService;

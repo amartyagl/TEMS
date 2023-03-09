@@ -35,12 +35,17 @@ public class JwtUserDetailsService {
 	public String authenticateUser(String email, String password) {
 		User user1 = userDao.findById(email).get();
 		String jwttoken = "";
+
 		if (email.equals(user1.getEmail()) && password.equals(user1.getPassword())) {
 			Claims claims = Jwts.claims();
 			claims.put("emailId", user1.getEmail());
-			jwttoken = Jwts.builder().setClaims(claims).setSubject(user1.getEmail()).setIssuedAt(new Date())
-					.setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000*60*60*2))
-					.signWith(SignatureAlgorithm.HS256, secret.getBytes()).compact();
+			jwttoken = Jwts.builder()
+					.setClaims(claims)
+					.setSubject(user1.getEmail())
+					.setIssuedAt(new Date())
+					.setExpiration(new Date(System.currentTimeMillis() + 1800000))
+					.signWith(SignatureAlgorithm.HS256, secret.getBytes())
+					.compact();
 		}
 		return jwttoken;
 	}

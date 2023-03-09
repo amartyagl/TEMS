@@ -1,0 +1,26 @@
+server:
+  port: 8083
+jwt:
+  secret: dadsnrgsthghdjgmdhgxfxmgfdyjmhgtxgdcjbngkjghchhfjdlshvfishdvuhzsuhvujksdbvkub
+spring:
+  application:
+    name: apigateway
+
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+
+      routes:
+        - id: xlsdatabase
+          uri:
+            lb://xlsdatabase
+          predicates:
+            - Path=/participant/**,/employee/**,/meeting/**,/sme/**,/meetingemployee/**
+        - id: authentication-service
+          uri:
+            lb://authentication-service
+          predicates:
+            - Path=/authenticate/**
+

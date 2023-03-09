@@ -18,6 +18,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
+@RequestMapping(value = "/meetingemployee")
 public class RegisterdEmployeeController {
 
     @Autowired

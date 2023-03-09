@@ -7,6 +7,7 @@ import org.apache.poi.xssf.XLSBUnsupportedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import com.globallogic.xlstodatabase.dto.EmployeeDto;
@@ -35,6 +36,10 @@ public class EmployeeServiceImpl implements EmployeeService{
 	MeetingDetailsRepository meetingDetailsRepository;
 
 	Logger logger= LoggerFactory.getLogger(EmployeeServiceImpl.class);
+
+	@Autowired
+	private KafkaTemplate<String ,EmployeeDto> kafkaTemplate;
+
 	
 	
 	@Override
@@ -48,6 +53,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 			employee.setLastName(employeeDto.getLastName());
 			employee.setLocation(employeeDto.getLocation());
 			employee.setProjectCode(employeeDto.getProjectCode());
+			kafkaTemplate.send("gmailTopic1",employeeDto);
 			employeeRepository.save(employee);
 			return new Response<>("1","Employee details saved succesfully");
 		}

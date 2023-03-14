@@ -1,9 +1,8 @@
-package com.authenticationservice.repository;
+package com.globallogic.authenticationservice.repository;
 
+import com.globallogic.authenticationservice.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import com.authenticationservice.model.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {

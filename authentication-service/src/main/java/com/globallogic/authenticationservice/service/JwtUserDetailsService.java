@@ -1,22 +1,25 @@
-package com.authenticationservice.service;
+package com.globallogic.authenticationservice.service;
 
+import java.io.IOException;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
-import com.authenticationservice.dto.EmployeeDto;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.globallogic.authenticationservice.dto.EmployeeDto;
+import com.globallogic.authenticationservice.model.User;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
-
-import com.authenticationservice.model.User;
-import com.authenticationservice.dto.UserDto;
-import com.authenticationservice.repository.UserRepository;
-
+import com.globallogic.authenticationservice.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 @Service
+@Slf4j
 public class JwtUserDetailsService {
 
 
@@ -27,14 +30,24 @@ public class JwtUserDetailsService {
 	@Autowired
 	private UserRepository userDao;
 	@KafkaListener(topics = "gmailTopic",groupId = "group2")
-	public User  consume(EmployeeDto employeeDto)
-	{
+	public User consume(String key)  {
+		log.info("In kafka listener");
+		ObjectMapper mapper=new ObjectMapper();
+		EmployeeDto employeeDto=null;
+		try {
+			employeeDto=mapper.readValue(key, EmployeeDto.class);
+		}
+		catch (IOException exception)
+		{
+			System.out.println(exception.getMessage());
+		}
+
+		log.info("Adding user from consuming through kafka");
 		User newUser = new User();
 		newUser.setEmail(employeeDto.getEmail());
 		newUser.setPassword(employeeDto.getPassword());
-		newUser.setRoles(employeeDto.getRoles());
+		newUser.setRoles( employeeDto.getRoles());
 		return userDao.save(newUser);
-
 	}
 
 

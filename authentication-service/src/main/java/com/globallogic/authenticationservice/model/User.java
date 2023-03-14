@@ -1,4 +1,4 @@
-package com.authenticationservice.model;
+package com.globallogic.authenticationservice.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;

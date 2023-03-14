@@ -8,7 +8,9 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="xlstodatabase" />
+        <module name="api-gateway" />
         <module name="authentication-service" />
+        <module name="eureka-server" />
       </profile>
     </annotationProcessing>
   </component>

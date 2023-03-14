@@ -1,11 +1,13 @@
-package com.authenticationservice.dto;
+package com.globallogic.authenticationservice.dto;
 
 import lombok.Data;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.List;
 
 @Data
+@ToString
 public class EmployeeDto implements Serializable {
 
 	private static final long serialVersionUID = 1L;

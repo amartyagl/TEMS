@@ -1,4 +1,4 @@
-package com.authenticationservice.model;
+package com.globallogic.authenticationservice.model;
 
 import java.io.Serializable;
 

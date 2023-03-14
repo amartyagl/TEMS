@@ -1,4 +1,4 @@
-package com.authenticationservice.dto;
+package com.globallogic.authenticationservice.dto;
 
 import lombok.AllArgsConstructor; 
 import lombok.Data;

@@ -1,8 +1,7 @@
-package com.authenticationservice.controller;
+package com.globallogic.authenticationservice.controller;
 
-import com.authenticationservice.model.JwtRequest;
-import com.authenticationservice.dto.UserDto;
-import com.authenticationservice.service.JwtUserDetailsService;
+import com.globallogic.authenticationservice.model.JwtRequest;
+import com.globallogic.authenticationservice.service.JwtUserDetailsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

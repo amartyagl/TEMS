@@ -19,14 +19,14 @@ public class Employee implements Serializable {
 	private String email;
 	private String projectCode;
 	private String location;
-	@OneToMany(mappedBy = "meetingAnchor")
+	@OneToMany(mappedBy = "meetingAnchor",cascade = CascadeType.ALL)
 	private List<MeetingDetails> meetingDetails;
-	@OneToMany(mappedBy = "eid")
+	@OneToMany(mappedBy = "eid",cascade = CascadeType.ALL)
 	private List<ParticipantOfMeeting> participantsOfMeeting;
-	@OneToMany(mappedBy = "eid")
+	@OneToMany(mappedBy = "eid",cascade = CascadeType.ALL)
 	private List<SMEDetails> smeDetails;
 
-	@OneToMany(mappedBy = "eid")
+	@OneToMany(mappedBy = "eid",cascade = CascadeType.ALL)
 	private List<RegisteredEmployee> registeredEmployees;
 }
 
